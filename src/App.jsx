@@ -6,7 +6,7 @@ import MyBooking from "./pages/MyBooking";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup"
 import Layout from "./components/Layout";
-import "./styles/app.css";
+import "./Styles/app.css";
 
 function App() {
   return (
