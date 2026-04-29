@@ -44,7 +44,7 @@ export default function Admin() {
 
       const userData = snapshot.docs[0].data();
 
-      if (userData.role !== "admin") {
+      if (!userData.role || userData.role !== "admin") {
         alert("Access denied");
         navigate("/");
         return;
@@ -86,28 +86,52 @@ export default function Admin() {
   }
 
   const filteredAppointments = appointments.filter((item) => {
-  if (filter === "all") return true;
-  return item.status === filter;
-});
+    if (filter === "all") return true;
+    return item.status === filter;
+  });
 
   return (
     <AppLayout>
+      <div className="qb-stats">
+        <div className="qb-stat">
+          <div className="qb-stat-num">{appointments.length}</div>
+          <div className="qb-stat-label">TOTAL</div>
+        </div>
+
+        <div className="qb-stat-divider"></div>
+
+        <div className="qb-stat">
+          <div className="qb-stat-num">
+            {appointments.filter(a => a.status === "pending").length}
+          </div>
+          <div className="qb-stat-label">PENDING</div>
+        </div>
+
+        <div className="qb-stat-divider"></div>
+
+        <div className="qb-stat">
+          <div className="qb-stat-num">
+            {appointments.filter(a => a.status === "completed").length}
+          </div>
+          <div className="qb-stat-label">DONE</div>
+        </div>
+      </div>
       <div className="qb-filter-bar">
-  {["all", "pending", "approved", "completed"].map((type) => (
-    <button
-      key={type}
-      onClick={() => setFilter(type)}
-      className={`qb-filter-btn ${filter === type ? "active" : ""}`}
-    >
-      {type.toUpperCase()}
-    </button>
-  ))}
-</div>
+        {["all", "pending", "approved", "completed"].map((type) => (
+          <button
+            key={type}
+            onClick={() => setFilter(type)}
+            className={`qb-filter-btn ${filter === type ? "active" : ""}`}
+          >
+            {type.toUpperCase()}
+          </button>
+        ))}
+      </div>
       <div className="qb-admin-card">
         <h2 style={{ marginBottom: "20px" }}>Admin Dashboard</h2>
         <h4 style={{ marginBottom: "10px" }}>Appointment</h4>
         <div className="qb-grid">
-          { filteredAppointments.map((item) => (
+          {filteredAppointments.map((item) => (
             <div
               key={item.id}
               className={`qb-booking-card ${item.status === "completed" ? "qb-completed" : ""}`}
